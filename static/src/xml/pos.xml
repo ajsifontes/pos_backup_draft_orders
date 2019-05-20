@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="myTemplate2" xml:space="preserve">
+    <t t-extend="PosTicket">
+        <t t-jquery="div:first" t-operation="append">
+            <barcode encoding="CODE39">78979</barcode>-->
+        <div>
+            <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' % ('Code128', 456654, 600, 100, 1)" style="width:300px;height:50px"/>-->
+        </div>
+        </t>
+    </t>
+
+    <t t-name="PrintOrderButtonWidget">
+            <button class="paypad-button">
+                Imprimir
+            </button>
+    </t>
+</templates>
