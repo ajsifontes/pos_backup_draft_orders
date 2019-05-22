@@ -2,14 +2,15 @@
 
 <templates id="myTemplate2" xml:space="preserve">
     <t t-extend="PosTicket">
-        <t t-jquery="div:first" t-operation="append">
-            <barcode type="CODE128">67657</barcode>
+
+        <t t-jquery="div.pos-sale-ticket" t-operation="append">
+            <div class=".barcode" id="barcode"></div>
         </t>
     </t>
 
     <t t-name="PrintOrderButtonWidget">
-            <button class="paypad-button">
-                Imprimir
-            </button>
+        <button class="paypad-button">
+            Imprimir
+        </button>
     </t>
 </templates>

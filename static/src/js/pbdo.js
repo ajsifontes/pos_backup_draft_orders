@@ -17,8 +17,8 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
-
 openerp.pos_backup_draft_orders = function (instance) {
+    var QWeb = instance.web.qweb,
     module = instance.point_of_sale;
     _t = instance.web._t;
 
@@ -44,8 +44,73 @@ openerp.pos_backup_draft_orders = function (instance) {
         backup_order: function() {
             var order = this.pos.get('selectedOrder');
             this.pos.push_order(order.exportAsJSON());
+            this.$el.find("#barcode").barcode(this.pos.get('selectedOrder').attributes.name.split(' ')[1],'code128');
             this.pos_widget.screen_selector.set_current_screen('receipt');
             this.pos.get('selectedOrder').destroy();
+        },
+    });
+
+
+
+    module.ReceiptScreenWidget = module.ScreenWidget.extend({
+        template: 'ReceiptScreenWidget',
+
+        show_numpad:     true,
+        show_leftpane:   true,
+
+        init: function(parent, options) {
+            this._super(parent,options);
+            this.model = options.model;
+            this.user = this.pos.get('user');
+            this.company = this.pos.get('company');
+            this.shop_obj = this.pos.get('shop');
+        },
+        renderElement: function() {
+            this._super();
+            this.pos.bind('change:selectedOrder', this.change_selected_order, this);
+            this.change_selected_order();
+        },
+        show: function(){
+            this._super();
+            var self = this;
+
+            this.add_action_button({
+                    label: _t('Print'),
+                    icon: '/point_of_sale/static/src/img/icons/png48/printer.png',
+                    click: function(){ self.print(); },
+                });
+
+            this.add_action_button({
+                    label: _t('Next Order'),
+                    icon: '/point_of_sale/static/src/img/icons/png48/go-next.png',
+                    click: function() { self.finishOrder(); },
+                });
+
+            this.print();
+        },
+        print: function() {
+            this.$el.find("#barcode").barcode(this.pos.get('selectedOrder').attributes.name.split(' ')[1],'code128');
+            window.print();
+        },
+        finishOrder: function() {
+            this.pos.get('selectedOrder').destroy();
+        },
+        change_selected_order: function() {
+            if (this.currentOrderLines)
+                this.currentOrderLines.unbind();
+            this.currentOrderLines = (this.pos.get('selectedOrder')).get('orderLines');
+            this.currentOrderLines.bind('add', this.refresh, this);
+            this.currentOrderLines.bind('change', this.refresh, this);
+            this.currentOrderLines.bind('remove', this.refresh, this);
+            if (this.currentPaymentLines)
+                this.currentPaymentLines.unbind();
+            this.currentPaymentLines = (this.pos.get('selectedOrder')).get('paymentLines');
+            this.currentPaymentLines.bind('all', this.refresh, this);
+            this.refresh();
+        },
+        refresh: function() {
+            this.currentOrder = this.pos.get('selectedOrder');
+            $('.pos-receipt-container', this.$el).html(QWeb.render('PosTicket',{widget:this}));
         },
     });
 

@@ -49,9 +49,13 @@ Copyright, Authors and Licence:
         'point_of_sale',
     ],
     'qweb': [
-        'static/src/xml/pos.xml',
+        'static/src/xml/pbdo.xml',
+    ],
+    'css': [
+        'static/src/css/pbdo.css',
     ],
     'js': [
+
         'static/src/js/jquery-barcode.min.js',
         'static/src/js/pbdo.js',
     ],
