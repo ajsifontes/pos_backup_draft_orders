@@ -10,7 +10,7 @@
 
     <t t-name="PrintOrderButtonWidget">
         <button class="paypad-button">
-            Imprimir
+            Reservar
         </button>
     </t>
 </templates>

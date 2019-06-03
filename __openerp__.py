@@ -52,11 +52,11 @@ Copyright, Authors and Licence:
         'static/src/xml/pbdo.xml',
     ],
     'css': [
+        'static/src/libs/print.min.css'
         'static/src/css/pbdo.css',
+
     ],
     'js': [
-
-        'static/src/js/jquery-barcode.min.js',
         'static/src/js/pbdo.js',
     ],
     'css': [

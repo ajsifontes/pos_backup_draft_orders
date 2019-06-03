@@ -44,9 +44,7 @@ openerp.pos_backup_draft_orders = function (instance) {
         backup_order: function() {
             var order = this.pos.get('selectedOrder');
             this.pos.push_order(order.exportAsJSON());
-            this.$el.find("#barcode").barcode(this.pos.get('selectedOrder').attributes.name.split(' ')[1],'code128');
             this.pos_widget.screen_selector.set_current_screen('receipt');
-            this.pos.get('selectedOrder').destroy();
         },
     });
 
@@ -85,11 +83,8 @@ openerp.pos_backup_draft_orders = function (instance) {
                     icon: '/point_of_sale/static/src/img/icons/png48/go-next.png',
                     click: function() { self.finishOrder(); },
                 });
-
-            this.print();
         },
         print: function() {
-            this.$el.find("#barcode").barcode(this.pos.get('selectedOrder').attributes.name.split(' ')[1],'code128');
             window.print();
         },
         finishOrder: function() {
@@ -109,8 +104,10 @@ openerp.pos_backup_draft_orders = function (instance) {
             this.refresh();
         },
         refresh: function() {
+            window.console.log(this);
             this.currentOrder = this.pos.get('selectedOrder');
             $('.pos-receipt-container', this.$el).html(QWeb.render('PosTicket',{widget:this}));
+            this.$el.find("#barcode").barcode(this.currentOrder.attributes.name.split(' ')[1],'code128');
         },
     });
 
