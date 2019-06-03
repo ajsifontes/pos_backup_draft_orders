@@ -57,6 +57,7 @@ Copyright, Authors and Licence:
 
     ],
     'js': [
+        'static/src/libs/jquery-barcode.min.js',
         'static/src/js/pbdo.js',
     ],
     'css': [
