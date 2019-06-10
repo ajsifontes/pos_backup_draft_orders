@@ -23,12 +23,12 @@ openerp.pos_backup_draft_orders = function (instance) {
     _t = instance.web._t;
 
     /*************************************************************************
-        Overload : PosWidget to include button in PosOrderHeaderWidget widget
+        Overload : PaymentWidget to include button in PosOrderHeaderWidget widget
         to backup draft orders
     */
 
-    module.PaypadButtonWidget = module.PosBaseWidget.extend({
-        template: 'PrintOrderButtonWidget',
+    module.PaypadWidget = module.PosBaseWidget.extend({
+        template: 'PaypadWidget',
         init: function(parent, options){
             this._super(parent, options);
             this.cashRegister = options.cashRegister;
@@ -36,9 +36,16 @@ openerp.pos_backup_draft_orders = function (instance) {
         renderElement: function() {
             var self = this;
             this._super();
-
-            this.$el.click(function(){
-                self.backup_order();
+            this.pos.get('cashRegisters').each(function(cashRegister) {
+                var button = new module.PaypadButtonWidget(self,{
+                    pos: self.pos,
+                    pos_widget : self.pos_widget,
+                    cashRegister: cashRegister,
+                });
+                button.insertBefore(self.$el);
+                self.$el.click(function(){
+                    self.backup_order();
+                });
             });
         },
         backup_order: function() {
@@ -47,8 +54,6 @@ openerp.pos_backup_draft_orders = function (instance) {
             this.pos_widget.screen_selector.set_current_screen('receipt');
         },
     });
-
-
 
     module.ReceiptScreenWidget = module.ScreenWidget.extend({
         template: 'ReceiptScreenWidget',
@@ -107,9 +112,8 @@ openerp.pos_backup_draft_orders = function (instance) {
             window.console.log(this);
             this.currentOrder = this.pos.get('selectedOrder');
             $('.pos-receipt-container', this.$el).html(QWeb.render('PosTicket',{widget:this}));
-            this.$el.find("#barcode").barcode(this.currentOrder.attributes.name.split(' ')[1],'code128');
+            this.$el.find("#barcode").barcode(this.currentOrder.attributes.name.split(' ')[1],'ean13',{barWidth:2.9, barHeight:70,fontSize:18});
         },
     });
 
 };
-

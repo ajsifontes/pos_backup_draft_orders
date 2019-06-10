@@ -48,6 +48,7 @@ Copyright, Authors and Licence:
     'depends': [
         'point_of_sale',
     ],
+    'sequence':1,
     'qweb': [
         'static/src/xml/pbdo.xml',
     ],
@@ -63,4 +64,5 @@ Copyright, Authors and Licence:
     'css': [
         'static/src/css/pbdo.css',
     ],
+    'application':True,
 }
