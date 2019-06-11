@@ -10,7 +10,7 @@
 
     <t t-extend="PaypadWidget">
       <t t-jquery="div#paypad" t-operation="append">
-        <button class="paypad-button">
+        <button class="paypad-button" id="reservar">
             Reservar
         </button>
         <br/>

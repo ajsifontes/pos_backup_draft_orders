@@ -42,16 +42,12 @@ openerp.pos_backup_draft_orders = function (instance) {
                     pos_widget : self.pos_widget,
                     cashRegister: cashRegister,
                 });
-                button.insertBefore(self.$el);
-                self.$el.click(function(){
-                    self.backup_order();
+                button.insertAfter(self.$el);
+                self.$el.find("#reservar").click(function(){
+                  self.pos_widget.screen_selector.set_current_screen('receipt');
+                  self.$el.find("#reservar").attr("disabled","disabled");
                 });
             });
-        },
-        backup_order: function() {
-            var order = this.pos.get('selectedOrder');
-            this.pos.push_order(order.exportAsJSON());
-            this.pos_widget.screen_selector.set_current_screen('receipt');
         },
     });
 
@@ -67,6 +63,7 @@ openerp.pos_backup_draft_orders = function (instance) {
             this.user = this.pos.get('user');
             this.company = this.pos.get('company');
             this.shop_obj = this.pos.get('shop');
+            this.cashRegister = options.cashRegister;
         },
         renderElement: function() {
             this._super();
@@ -80,13 +77,19 @@ openerp.pos_backup_draft_orders = function (instance) {
             this.add_action_button({
                     label: _t('Print'),
                     icon: '/point_of_sale/static/src/img/icons/png48/printer.png',
-                    click: function(){ self.print(); },
+                    click: function(){
+                      self.print();
+                    },
                 });
 
             this.add_action_button({
                     label: _t('Next Order'),
                     icon: '/point_of_sale/static/src/img/icons/png48/go-next.png',
-                    click: function() { self.finishOrder(); },
+                    click: function() {
+                      self.finishOrder();
+                      self.backup_order();
+                      $("#reservar").removeAttr("disabled");
+                    },
                 });
         },
         print: function() {
@@ -112,7 +115,11 @@ openerp.pos_backup_draft_orders = function (instance) {
             window.console.log(this);
             this.currentOrder = this.pos.get('selectedOrder');
             $('.pos-receipt-container', this.$el).html(QWeb.render('PosTicket',{widget:this}));
-            this.$el.find("#barcode").barcode(this.currentOrder.attributes.name.split(' ')[1],'ean13',{barWidth:2.9, barHeight:70,fontSize:18});
+            this.$el.find("#barcode").barcode(this.currentOrder.attributes.name.split(' ')[1],'code128',{barWidth:2.9, barHeight:70,fontSize:18});
+        },
+        backup_order: function() {
+            var order = this.pos.get('selectedOrder');
+            this.pos.push_order(order.exportAsJSON());
         },
     });
 
