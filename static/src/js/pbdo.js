@@ -86,8 +86,8 @@ openerp.pos_backup_draft_orders = function (instance) {
                     label: _t('Next Order'),
                     icon: '/point_of_sale/static/src/img/icons/png48/go-next.png',
                     click: function() {
-                      self.finishOrder();
                       self.backup_order();
+                      self.finishOrder();
                       $("#reservar").removeAttr("disabled");
                     },
                 });
