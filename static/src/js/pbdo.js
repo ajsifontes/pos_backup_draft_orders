@@ -112,7 +112,6 @@ openerp.pos_backup_draft_orders = function (instance) {
             this.refresh();
         },
         refresh: function() {
-            window.console.log(this);
             this.currentOrder = this.pos.get('selectedOrder');
             $('.pos-receipt-container', this.$el).html(QWeb.render('PosTicket',{widget:this}));
             this.$el.find("#barcode").barcode(this.currentOrder.attributes.name.split(' ')[1],'code128',{barWidth:2.9, barHeight:70,fontSize:18});
