@@ -1,13 +1,15 @@
-@media print {
-    @page{
-        size:8.5cm;
-        margin: 0.2cm
-    }
+@media print{
+  @page{
+    /* size:75mm 297mm; */
+    margin:2mm;
+  }
+  .point-of-sale .pos-sale-ticket{
+      border: solid 0px white !important;
+  }
 }
 
 #barcode{
-margin-top:10%;
-margin-right: auto;
-margin-left: auto;
-
+  margin-top:10%;
+  margin-right: auto;
+  margin-left: auto;
 }
